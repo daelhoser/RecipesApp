@@ -39,10 +39,57 @@ class RecipeRepository {
                 throw RepositoryError.fetchError
             }
 
-            return []
+            let root = try JSONDecoder().decode(RecipesRootApi.self, from: data)
+
+            return try map(root: root)
         } catch {
             throw RepositoryError.fetchError
         }
+    }
+
+    private func map(root: RecipesRootApi) throws -> [Recipe] {
+        guard let recipes = root.recipes else {
+            // TODO: I don't recall business rules mentioning not receiving a recipes. I'll assum this is done on purpose for performance reasons and will return an empty array
+            return []
+        }
+
+        guard !recipes.isEmpty  else {
+            return []
+        }
+
+        let mappedRecipe = recipes.compactMap { recipe -> Recipe? in
+            guard let cuisine = recipe.cuisine,
+                  let name = recipe.name,
+                  let id = recipe.uuid
+            else {
+                return nil
+            }
+
+            let url: URL? = if let urlString = recipe.photo_url_small {
+                URL(string: urlString)
+            } else {
+                nil
+            }
+
+            return Recipe(id: id, name: name, cuisineType: cuisine, smallPhotoURL: url)
+        }
+
+        if recipes.count != mappedRecipe.count {
+            throw RepositoryError.fetchError
+        }
+
+        return mappedRecipe
+    }
+
+    private struct RecipesRootApi: Decodable {
+        let recipes: [RecipeAPI]?
+    }
+
+    private struct RecipeAPI: Decodable {
+        let uuid: UUID?
+        let name: String?
+        let cuisine: String?
+        let photo_url_small: String?
     }
 }
 
@@ -92,6 +139,26 @@ final class RepositoryTests: XCTestCase {
         let nonHTTPURLResponse = URLResponse()
 
         try await expect(expectedResult: .failure(RepositoryError.fetchError), when: .success((Data(), nonHTTPURLResponse)))
+    }
+
+    func test_loadRecipse_throwFetchErrorOnInvalidJSONError() async throws {
+        let anyURL = URL(string: "google.com")!
+        let response = HTTPURLResponse(url: anyURL, statusCode: 200, httpVersion: nil, headerFields: nil)!
+        let jsonData = "invalid json".data(using: .utf8)!
+
+        try await expect(expectedResult: .failure(RepositoryError.fetchError), when: .success((jsonData, response)))
+
+        let incompleteJSON = [
+            "recipes": [
+                [
+                    "uuid": UUID().uuidString,
+                    "cuisine": "Italian",
+                ]
+            ]
+        ]
+
+        let incompleteRecipes = try JSONSerialization.data(withJSONObject: incompleteJSON, options: .prettyPrinted)
+        try await expect(expectedResult: .failure(RepositoryError.fetchError), when: .success((incompleteRecipes, response)))
     }
 
     private func makeSUT(completeWith result: Result<(Data, URLResponse), Error> = .success((Data(), URLResponse()))) -> (RecipeRepository, MockService) {
