@@ -66,11 +66,3 @@ final class RepositoryTests: XCTestCase {
         }
     }
 }
-
-extension XCTestCase {
-    func trackForMemoryLeaks(object: AnyObject, file: StaticString = #file, line: UInt = #line) {
-        addTeardownBlock { [weak object] in
-            XCTAssertNil(object, "Object should be deallocated", file: file, line: line)
-        }
-    }
-}
