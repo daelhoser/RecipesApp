@@ -29,17 +29,13 @@ class RecipeRepository {
 final class RepositoryTests: XCTestCase {
 
     func test_onInit_doesNotRequestData() {
-        let url = URL(string: "https://any-url.com")!
-        let mock = MockServiceSpy()
-        _ = RecipeRepository(url: url, service: mock)
+        let (_, mock) = makeSUT()
 
         XCTAssertEqual(mock.numberOfRequests, 0)
     }
 
     func test_loadRecipes_requestsData() async throws {
-        let url = URL(string: "https://any-url.com")!
-        let mock = MockServiceSpy()
-        let sut = RecipeRepository(url: url, service: mock)
+        let (sut, mock) = makeSUT()
 
         _ = try await sut.loadRecipes()
         _ = try await sut.loadRecipes()
@@ -48,8 +44,16 @@ final class RepositoryTests: XCTestCase {
         XCTAssertEqual(mock.numberOfRequests, 3)
     }
 
+    private func makeSUT() -> (RecipeRepository, MockService) {
+        let url = URL(string: "https://any-url.com")!
+        let mock = MockService()
+        let sut = RecipeRepository(url: url, service: mock)
 
-    class MockServiceSpy: NetworkService {
+        return (sut, mock)
+    }
+
+
+    class MockService: NetworkService {
         var numberOfRequests = 0
         
         func data(from url: URL) async throws -> (Data, URLResponse) {
