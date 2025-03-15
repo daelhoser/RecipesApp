@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Recipe: Equatable {
+public struct Recipe: Equatable, Identifiable {
     public let id: UUID
     public let name: String
     public let cuisineType: String
