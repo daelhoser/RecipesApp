@@ -49,6 +49,9 @@ final class RepositoryTests: XCTestCase {
         let mock = MockService()
         let sut = RecipeRepository(url: url, service: mock)
 
+        trackForMemoryLeaks(object: mock)
+        trackForMemoryLeaks(object: sut)
+
         return (sut, mock)
     }
 
@@ -60,6 +63,14 @@ final class RepositoryTests: XCTestCase {
             numberOfRequests += 1
 
             return (Data(), URLResponse(url: url, mimeType: nil, expectedContentLength: 0, textEncodingName: nil))
+        }
+    }
+}
+
+extension XCTestCase {
+    func trackForMemoryLeaks(object: AnyObject, file: StaticString = #file, line: UInt = #line) {
+        addTeardownBlock { [weak object] in
+            XCTAssertNil(object, "Object should be deallocated", file: file, line: line)
         }
     }
 }
