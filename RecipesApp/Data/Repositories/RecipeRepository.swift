@@ -7,7 +7,7 @@
 
 import Foundation
 
-public final class RecipeRepository {
+public final class RecipeRepository: RecipeRepositoryProtocol {
     private let url: URL
     private let service: NetworkService
     
