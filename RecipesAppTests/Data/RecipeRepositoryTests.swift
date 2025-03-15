@@ -11,6 +11,10 @@ protocol NetworkService {
     func data(from url: URL) async throws -> (Data, URLResponse)
 }
 
+enum RepositoryError: Error {
+    case fetchError
+}
+
 class RecipeRepository {
     private let url: URL
     private let service: NetworkService
@@ -21,7 +25,11 @@ class RecipeRepository {
     }
 
     func loadRecipes() async throws {
-        _ = try await service.data(from: url)
+        do {
+            _ = try await service.data(from: url)
+        } catch {
+            throw RepositoryError.fetchError
+        }
     }
 }
 
@@ -44,9 +52,21 @@ final class RepositoryTests: XCTestCase {
         XCTAssertEqual(mock.numberOfRequests, 3)
     }
 
-    private func makeSUT() -> (RecipeRepository, MockService) {
+    func test_loadRecipes_throwsFetchErrorOnErrorThrowned() async throws {
+        let (sut, _) = makeSUT(completeWith: .failure(NSError(domain: "any error", code: 0)))
+
+        do {
+            _ = try await sut.loadRecipes()
+
+            XCTFail("Expected a throw, instead code executed successfully")
+        } catch  {
+            XCTAssertEqual(error as? RepositoryError, RepositoryError.fetchError, "Expected \(RepositoryError.fetchError) error, received \(error) instead")
+        }
+    }
+
+    private func makeSUT(completeWith result: Result<(Data, URLResponse), Error> = .success((Data(), URLResponse()))) -> (RecipeRepository, MockService) {
         let url = URL(string: "https://any-url.com")!
-        let mock = MockService()
+        let mock = MockService(result: result)
         let sut = RecipeRepository(url: url, service: mock)
 
         trackForMemoryLeaks(object: mock)
@@ -57,12 +77,23 @@ final class RepositoryTests: XCTestCase {
 
 
     class MockService: NetworkService {
+        private let result: Result<(Data, URLResponse), Error>
+
         var numberOfRequests = 0
-        
+
+        init(result: Result<(Data, URLResponse), Error>) {
+            self.result = result
+        }
+
         func data(from url: URL) async throws -> (Data, URLResponse) {
             numberOfRequests += 1
 
-            return (Data(), URLResponse(url: url, mimeType: nil, expectedContentLength: 0, textEncodingName: nil))
+            switch result {
+                case .success(let (data, response)):
+                return (data, response)
+            case .failure(let error):
+                throw error
+            }
         }
     }
 }
