@@ -88,6 +88,11 @@ final class RepositoryTests: XCTestCase {
         }
     }
 
+    func test_loadRecipes_throwFetchErrorOnNonHTTPURLResponse() async throws {
+        let nonHTTPURLResponse = URLResponse()
+
+        try await expect(expectedResult: .failure(RepositoryError.fetchError), when: .success((Data(), nonHTTPURLResponse)))
+    }
 
     private func makeSUT(completeWith result: Result<(Data, URLResponse), Error> = .success((Data(), URLResponse()))) -> (RecipeRepository, MockService) {
         let url = URL(string: "https://any-url.com")!
