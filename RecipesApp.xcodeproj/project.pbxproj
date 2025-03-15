@@ -14,19 +14,11 @@
 			remoteGlobalIDString = 24ACADA82D8508B200617462;
 			remoteInfo = RecipesApp;
 		};
-		24ACADC42D8508B300617462 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 24ACADA12D8508B200617462 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 24ACADA82D8508B200617462;
-			remoteInfo = RecipesApp;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		24ACADA92D8508B200617462 /* RecipesApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RecipesApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		24ACADB92D8508B300617462 /* RecipesAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RecipesAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		24ACADC32D8508B300617462 /* RecipesAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RecipesAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -62,13 +54,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		24ACADC02D8508B300617462 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -87,7 +72,6 @@
 			children = (
 				24ACADA92D8508B200617462 /* RecipesApp.app */,
 				24ACADB92D8508B300617462 /* RecipesAppTests.xctest */,
-				24ACADC32D8508B300617462 /* RecipesAppUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -140,29 +124,6 @@
 			productReference = 24ACADB92D8508B300617462 /* RecipesAppTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		24ACADC22D8508B300617462 /* RecipesAppUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 24ACADD32D8508B300617462 /* Build configuration list for PBXNativeTarget "RecipesAppUITests" */;
-			buildPhases = (
-				24ACADBF2D8508B300617462 /* Sources */,
-				24ACADC02D8508B300617462 /* Frameworks */,
-				24ACADC12D8508B300617462 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				24ACADC52D8508B300617462 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				24ACADC62D8508B300617462 /* RecipesAppUITests */,
-			);
-			name = RecipesAppUITests;
-			packageProductDependencies = (
-			);
-			productName = RecipesAppUITests;
-			productReference = 24ACADC32D8508B300617462 /* RecipesAppUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -177,10 +138,6 @@
 						CreatedOnToolsVersion = 16.2;
 					};
 					24ACADB82D8508B300617462 = {
-						CreatedOnToolsVersion = 16.2;
-						TestTargetID = 24ACADA82D8508B200617462;
-					};
-					24ACADC22D8508B300617462 = {
 						CreatedOnToolsVersion = 16.2;
 						TestTargetID = 24ACADA82D8508B200617462;
 					};
@@ -202,7 +159,6 @@
 			targets = (
 				24ACADA82D8508B200617462 /* RecipesApp */,
 				24ACADB82D8508B300617462 /* RecipesAppTests */,
-				24ACADC22D8508B300617462 /* RecipesAppUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -216,13 +172,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		24ACADB72D8508B300617462 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		24ACADC12D8508B300617462 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -246,13 +195,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		24ACADBF2D8508B300617462 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -260,11 +202,6 @@
 			isa = PBXTargetDependency;
 			target = 24ACADA82D8508B200617462 /* RecipesApp */;
 			targetProxy = 24ACADBA2D8508B300617462 /* PBXContainerItemProxy */;
-		};
-		24ACADC52D8508B300617462 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 24ACADA82D8508B200617462 /* RecipesApp */;
-			targetProxy = 24ACADC42D8508B300617462 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -486,40 +423,6 @@
 			};
 			name = Release;
 		};
-		24ACADD42D8508B300617462 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = BV8HVD6H7Z;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = Jose.RecipesAppUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = RecipesApp;
-			};
-			name = Debug;
-		};
-		24ACADD52D8508B300617462 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = BV8HVD6H7Z;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = Jose.RecipesAppUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = RecipesApp;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -546,15 +449,6 @@
 			buildConfigurations = (
 				24ACADD12D8508B300617462 /* Debug */,
 				24ACADD22D8508B300617462 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		24ACADD32D8508B300617462 /* Build configuration list for PBXNativeTarget "RecipesAppUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				24ACADD42D8508B300617462 /* Debug */,
-				24ACADD52D8508B300617462 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
