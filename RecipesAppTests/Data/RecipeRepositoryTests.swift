@@ -161,6 +161,15 @@ final class RepositoryTests: XCTestCase {
         try await expect(expectedResult: .failure(RepositoryError.fetchError), when: .success((incompleteRecipes, response)))
     }
 
+    func test_loadRecipes_deliversMappedRecipesOnSuccessfulResponseWithValidData() async throws {
+        let anyURL = URL(string: "google.com")!
+        let response = HTTPURLResponse(url: anyURL, statusCode: 200, httpVersion: nil, headerFields: nil)!
+        let recipes = getRecipes()
+        let jsonData = try JSONSerialization.data(withJSONObject: recipes.1, options: .prettyPrinted)
+
+        try await expect(expectedResult: .success(recipes.0), when: .success((jsonData, response)))
+    }
+
     private func makeSUT(completeWith result: Result<(Data, URLResponse), Error> = .success((Data(), URLResponse()))) -> (RecipeRepository, MockService) {
         let url = URL(string: "https://any-url.com")!
         let mock = MockService(result: result)
@@ -189,6 +198,42 @@ final class RepositoryTests: XCTestCase {
             let capturedResult = Result<[Recipe], RepositoryError>.failure(error as! RepositoryError)
             XCTAssertEqual(capturedResult, expectedResult, "Expected \(expectedResult), received \(capturedResult) instead", file: file, line: line)
         }
+    }
+
+    private func getRecipes() -> ([Recipe], [String: [[String: String]]]) {
+        let recipe1 = validRecipe(id: UUID())
+        let recipe2 = validRecipe(id: UUID())
+        let recipe3 = validRecipe(id: UUID())
+        let recipe4 = validRecipe(id: UUID())
+
+        let recipesDict = [
+            "recipes": [
+                recipe1.1,
+                recipe2.1,
+                recipe3.1,
+                recipe4.1
+            ]
+        ]
+
+        return ([recipe1.0, recipe2.0, recipe3.0, recipe4.0], recipesDict)
+    }
+
+    private func validRecipe(
+        id: UUID = UUID(),
+        name: String = "any name",
+        cuisineType: String = "any cuisine",
+        smallImageUrl: URL = URL(string: "any-url.com")!
+    ) -> (Recipe, [String: String]) {
+        let dictionary: [String: String] = [
+            "uuid": id.uuidString,
+            "name": name,
+            "cuisine": cuisineType,
+            "photo_url_small": smallImageUrl.absoluteString
+        ]
+
+        let recipe = Recipe(id: id, name: name, cuisineType: cuisineType, smallPhotoURL: smallImageUrl)
+
+        return (recipe, dictionary)
     }
 
     class MockService: NetworkService {
