@@ -127,11 +127,13 @@ final class RepositoryTests: XCTestCase {
     func test_loadRecipes_throwFetchErrorOnNon2xxHTTPStatusCode() async throws {
         let anyURL = URL(string: "google.com")!
         let statusCodes: [Int] = [199, 201, 400, 500]
+        let recipes = getRecipes()
+        let validJSONData = try JSONSerialization.data(withJSONObject: recipes.1, options: .prettyPrinted)
 
         for statusCode in statusCodes {
             let response = HTTPURLResponse(url: anyURL, statusCode: statusCode, httpVersion: nil, headerFields: nil)!
 
-            try await expect(expectedResult: .failure(RepositoryError.fetchError), when: .success((Data(), response)))
+            try await expect(expectedResult: .failure(RepositoryError.fetchError), when: .success((validJSONData, response)))
         }
     }
 
