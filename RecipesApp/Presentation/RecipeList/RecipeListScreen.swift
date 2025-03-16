@@ -27,6 +27,9 @@ struct RecipeListScreen: View {
                                 RecipeView(viewModel: recipeViewModelFactory.getViewModel(for: recipe))
                             }
                         }
+                        .refreshable {
+                            await viewModel.loadRecipes()
+                        }
                     } else {
                         Text("No Recipes Found")
                     }
