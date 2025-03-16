@@ -20,8 +20,11 @@ struct RecipeListScreen: View {
         case .loaded:
             if let recipes = viewModel.recipes {
                 List {
-                    ForEach(recipes) { recipe in
-                        RecipeView(recipe: recipe)
+                    ForEach(recipes, id: \.id) { recipe in
+
+                        // TODO: TEMP Code
+                        RecipeView(viewModel: RecipeViewModel(recipe: recipe, fetchImageUseCase: FetchImageUseCase(cache: NSImageCache(), repository: ImageRepository(service: URLSession(configuration: .ephemeral)
+))))
                     }
                 }
             } else {
