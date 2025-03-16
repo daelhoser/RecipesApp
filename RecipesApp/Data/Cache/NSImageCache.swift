@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class NSImageCache: ImageCacheProtocol {
+actor NSImageCache: ImageCacheProtocol {
     let cache: NSCache<NSString, NSData>
 
     // TODO: I want to point out that since this is a infrastructure component, this component (wrapper) should be as dumb as possible, meaning only perform crud operations, no business rules and no customization needs to be done to NSCache then, in my opinion)
