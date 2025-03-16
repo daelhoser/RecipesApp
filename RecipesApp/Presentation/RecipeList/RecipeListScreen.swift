@@ -19,7 +19,7 @@ struct RecipeListScreen: View {
                     await viewModel.loadRecipes()
                 }
         case .loaded:
-            if let recipes = viewModel.recipes {
+            if let recipes = viewModel.recipes, !recipes.isEmpty {
                 List {
                     ForEach(recipes, id: \.id) { recipe in
                         RecipeView(viewModel: recipeViewModelFactory.getViewModel(for: recipe))
@@ -27,11 +27,17 @@ struct RecipeListScreen: View {
                 }
             } else {
                 Button("No recipes. try again") {
-
+                    Task {
+                        await viewModel.loadRecipes()
+                    }
                 }
             }
         case .error:
-            Text("Error loading recipes.")
+            Button("Error loading recipes. try again") {
+                Task {
+                    await viewModel.loadRecipes()
+                }
+            }
         }
     }
 }
