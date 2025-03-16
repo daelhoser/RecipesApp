@@ -28,11 +28,7 @@ struct RecipeListScreen: View {
                             }
                         }
                     } else {
-                        Button("No recipes. try again") {
-                            Task {
-                                await viewModel.loadRecipes()
-                            }
-                        }
+                        Text("No Recipes Found")
                     }
                 case .error:
                     Button("Error loading recipes. try again") {
