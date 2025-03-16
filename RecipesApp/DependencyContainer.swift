@@ -18,14 +18,21 @@ final class RecipesListContainer {
         RecipeRepository(url: recipesURL, service: networkService)
     }()
 
+    private let imageCache: ImageCacheProtocol = NSImageCache()
+
+    @MainActor
+    private lazy var recipeViewModelFactory: RecipeViewModelFactory = {
+        DefaultRecipeViewModelFactory(imageCache: imageCache, service: URLSession(configuration: .ephemeral))
+    }()
 
     @MainActor
     static func composeRecipeList() -> RecipeListScreen {
-        let repository = RecipesListContainer().repository
+        let container = RecipesListContainer()
+        let repository = container.repository
         let useCase = FetchRecipesUseCase(repository: repository)
         let viewModel = RecipesListViewModel(getRecipesUseCase: useCase)
 
-        return RecipeListScreen(viewModel: viewModel)
+        return RecipeListScreen(recipeViewModelFactory: container.recipeViewModelFactory, viewModel: viewModel)
     }
 }
 
