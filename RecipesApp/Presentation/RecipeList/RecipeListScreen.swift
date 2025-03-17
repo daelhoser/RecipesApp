@@ -13,35 +13,35 @@ struct RecipeListScreen: View {
 
     var body: some View {
         NavigationStack {
-            Group {
+            List {
                 switch viewModel.loadingState {
                 case .idle, .loading:
-                    ProgressView()
-                        .task {
-                            await viewModel.loadRecipes()
-                        }
+                    HStack {
+                        Spacer()
+                        ProgressView()
+                        Spacer()
+                    }
                 case .loaded:
                     if let recipes = viewModel.recipes, !recipes.isEmpty {
-                        List {
-                            ForEach(recipes, id: \.id) { recipe in
-                                RecipeView(viewModel: recipeViewModelFactory.getViewModel(for: recipe))
-                            }
-                        }
-                        .refreshable {
-                            await viewModel.loadRecipes()
+                        ForEach(recipes, id: \.id) { recipe in
+                            RecipeView(viewModel: recipeViewModelFactory.getViewModel(for: recipe))
                         }
                     } else {
                         Text("No Recipes Found")
                     }
                 case .error:
                     Button("Error loading recipes. try again") {
-                        Task {
-                            await viewModel.loadRecipes()
-                        }
+                        viewModel.reloadRecipes()
                     }
                 }
             }
-                .navigationTitle("Recipes")
+            .task {
+                await viewModel.loadRecipes()
+            }
+            .refreshable {
+                await viewModel.loadRecipes()
+            }
+            .navigationTitle("Recipes")
         }
     }
 }

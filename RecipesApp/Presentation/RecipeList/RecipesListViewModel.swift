@@ -17,6 +17,7 @@ enum LoadingState {
 @MainActor
 final class RecipesListViewModel: ObservableObject {
     private let getRecipesUseCase: FetchRecipesUseCaseProtocol
+    private var task: Task<(), Never>?
 
     @Published var loadingState: LoadingState = .idle
 
@@ -27,13 +28,22 @@ final class RecipesListViewModel: ObservableObject {
     }
 
     func loadRecipes() async {
+        guard task == nil else { return }
+
         loadingState = .loading
 
         do {
             recipes = try await getRecipesUseCase()
             loadingState = .loaded
+            task = nil
         } catch {
             loadingState = .error
+        }
+    }
+
+    func reloadRecipes() {
+        task = Task {
+            await loadRecipes()
         }
     }
 }
